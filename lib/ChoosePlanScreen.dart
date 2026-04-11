@@ -1,3 +1,4 @@
+import 'package:dldetection/ServiceDetailsAndBookingDetails.dart';
 import 'package:flutter/material.dart';
 
 double _contentWidth(BuildContext context) {
@@ -51,7 +52,9 @@ class _ChoosePlanScreenState extends State<ChoosePlanScreen> {
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
                     child: IntrinsicHeight(
                       child: Column(
                         children: [
@@ -90,10 +93,7 @@ class _Header extends StatelessWidget {
   final double widthScale;
   final double heightScale;
 
-  const _Header({
-    required this.widthScale,
-    required this.heightScale,
-  });
+  const _Header({required this.widthScale, required this.heightScale});
 
   @override
   Widget build(BuildContext context) {
@@ -165,15 +165,18 @@ class _PlanSelectionContent extends StatelessWidget {
             heightScale: heightScale,
           ),
           SizedBox(height: 24 * heightScale),
-          _PlanCard(
-            title: 'Sending\nitems',
-            startsFrom: '₹15/km',
-            isSelected: selectedPlan == 1,
-            onTap: () => onSelectPlan(1),
-            activeBorderColor: const Color(0xFFA16244),
-            activeTextColor: const Color(0xFF8E6E5D),
-            widthScale: widthScale,
-            heightScale: heightScale,
+          SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.5,
+            child: _PlanCard(
+              title: 'Sending\nitems',
+              startsFrom: '₹15/km',
+              isSelected: selectedPlan == 1,
+              onTap: () => onSelectPlan(1),
+              activeBorderColor: const Color(0xFFA16244),
+              activeTextColor: const Color(0xFF8E6E5D),
+              widthScale: widthScale,
+              heightScale: heightScale,
+            ),
           ),
         ],
       ),
@@ -212,9 +215,7 @@ class _PlanCard extends StatelessWidget {
         padding: EdgeInsets.all(20 * widthScale),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected
-                ? activeBorderColor
-                : const Color(0xFFE5E7EB),
+            color: isSelected ? activeBorderColor : const Color(0xFFE5E7EB),
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(8 * widthScale),
@@ -276,7 +277,6 @@ class _PlanCard extends StatelessWidget {
   }
 }
 
-// Custom radio indicator (outer circle + inner dot when selected)
 class _RadioIndicator extends StatelessWidget {
   final bool isSelected;
   final Color activeColor;
@@ -291,40 +291,27 @@ class _RadioIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 16 * widthScale,
-      height: 16 * widthScale,
+      width: 22 * widthScale,
+      height: 22 * widthScale,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        color: Colors.white, // inner white
         border: Border.all(
-          color: isSelected ? activeColor : const Color(0xFFD1D5DB),
-          width: 1.5,
+          color: isSelected
+              ? const Color(0xFF8B3A00) // brown outer
+              : const Color(0xFFD1D5DB),
+          width: isSelected ? 8 : 3, // thick border
         ),
       ),
-      child: isSelected
-          ? Center(
-              child: Container(
-                width: 8 * widthScale,
-                height: 8 * widthScale,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: activeColor,
-                ),
-              ),
-            )
-          : null,
     );
   }
 }
-
 // Bottom footer with share icon and book again button
 class _BottomFooter extends StatelessWidget {
   final double widthScale;
   final double heightScale;
 
-  const _BottomFooter({
-    required this.widthScale,
-    required this.heightScale,
-  });
+  const _BottomFooter({required this.widthScale, required this.heightScale});
 
   @override
   Widget build(BuildContext context) {
@@ -339,9 +326,9 @@ class _BottomFooter extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Share tapped')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Share tapped')));
             },
             child: Icon(
               Icons.share,
@@ -353,9 +340,11 @@ class _BottomFooter extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Booking again')),
-                );
+               Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>ServiceDetailsAndBookingDetails()
+               )
+               );
+            
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFB25900),

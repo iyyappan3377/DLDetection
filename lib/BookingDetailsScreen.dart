@@ -1,3 +1,4 @@
+import 'package:dldetection/ChoosePlanScreen.dart';
 import 'package:flutter/material.dart';
 
 double _contentWidth(BuildContext context) {
@@ -637,6 +638,12 @@ class _FooterActions extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChoosePlanScreen()
+                  ),
+                );
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Booking again')),
                 );
